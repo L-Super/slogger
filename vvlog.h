@@ -11,14 +11,13 @@
 
 namespace vv {
 	using namespace spdlog;
-
+	using vvLevel = spdlog::level::level_enum;
 
 	/**
 	 * @brief vlogger 单例日志类.
 	 */
 	class vlogger
 	{
-		using vvLevel = spdlog::level::level_enum;
 	public:
 		/**
 		 * @brief 设置显示日志等级.
@@ -48,6 +47,16 @@ namespace vv {
 	private:
 		vlogger();
 	};
+
+	//仅打印到控制台
+	/**
+	 * vv::info()
+	 * vv::warn()
+	 * vv::error()
+	 * vv::critical()
+	 * vv::trace()
+	 * vv::debug()
+	 */
 
 	//同时输出到控制台和文件
 	template<typename... Args>

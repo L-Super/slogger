@@ -65,6 +65,22 @@ vv::info(str.toLocal8Bit());
 vv::vvInfo("this is {}", str.toLocal8Bit());
 ```
 
+## 注意
+
+默认不会打印trace,debug级别日志，需要设置日志级别。
+
+```cpp
+vv::vlogger::instance().vSetLevel(vv::vvLevel::trace);
+```
+
+同时，vv::info等仅打印到控制台不受影响。若要开启debug显示，使用以下语句开启全局日志级别设置
+
+```cpp
+spdlog::set_level(vv::vvLevel::trace);
+```
+
+
+
 
 
 ----
