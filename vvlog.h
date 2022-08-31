@@ -131,6 +131,12 @@ namespace vv {
 		vlogger::instance().mLogger->critical(msg);
 	}
 
+	/**
+	 * @brief 设置全局日志等级.
+	 */
+	void vvSetGlobalLevel(vvLevel l);
+
+
 	//TODO: func(Args &&) 
 	//TODO: user-defined objects
 	// https://fmt.dev/latest/api.html#udt

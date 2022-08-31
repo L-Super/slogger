@@ -13,7 +13,6 @@ void vv::vlogger::vSetLevel(vvLevel l)
 void vv::vlogger::vSetFlush(vvLevel l)
 {
 	mLogger->flush_on(l);
-
 }
 
 vv::vlogger& vv::vlogger::instance()
@@ -41,10 +40,15 @@ vv::vlogger::vlogger()
 		{
 			mLogger = getLogger;
 		}
-
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
 		std::cout << "Log initialization failed: " << ex.what() << std::endl;
 	}
+}
+
+void vv::vvSetGlobalLevel(vvLevel l)
+{
+	spdlog::set_level(l);
+	vlogger::instance().vGetLogger()->set_level(l);
 }
