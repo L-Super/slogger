@@ -76,7 +76,7 @@ vv::vlogger::instance().vSetLevel(vv::vvLevel::trace);
 同时，vv::info等仅打印到控制台不受影响。若要开启debug显示，使用以下语句开启全局日志级别设置
 
 ```cpp
-spdlog::set_level(vv::vvLevel::trace);
+vv::vvSetGlobalLevel(vv::vvLevel::trace);
 ```
 
 
