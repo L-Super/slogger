@@ -23,7 +23,7 @@
 
 仅打印到控制台
 
-```
+```cpp
 vv::info()
 vv::warn()
 vv::error()
@@ -36,7 +36,7 @@ vv::debug()
 
 同时打印到控制台及文件。出于性能原因，日志信息不会立即刷新到文件中，默认运行结束后刷新，后可根据情况进行调整。
 
-```
+```cpp
 vv::vvInfo();
 vv::vvWarn();
 vv::vvError();
@@ -45,9 +45,22 @@ vv::vvDebug();
 vv::vvTrace();
 ```
 
-## 代码示例
+### 调试模式输出
+
+推荐使用`VINFO()`代替`vv::info()`，因为此方法比`vv::info()`形式更好，可以打印时，带有文件名-函数名-行号格式，方便开发调试过程中的快速定位。
 
 ```
+VTRACE()
+VDEBUG()
+VINFO()
+VWARN()
+VERROR()
+VCRITICAL()
+```
+
+## 代码示例
+
+```cpp
 vv::info("Welcome");
 vv::error("Some error message with arg: {}", 1);
 vv::warn("Easy padding in numbers like {:08d}", 12);
@@ -59,7 +72,7 @@ vv::info("{:<30}", "left aligned");
 
 注意，因现环境为GBK，**Qt的QString需要使用`toLocal8Bit()`转换**，否则会乱码。
 
-```
+```cpp
 QString str(QStringLiteral("客户端"));
 vv::info(str.toLocal8Bit());
 vv::vvInfo("this is {}", str.toLocal8Bit());
