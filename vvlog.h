@@ -146,3 +146,51 @@ namespace vv {
 	//	log(level::info, fmt, std::forward<Args>(args)...);
 	//}
 }
+
+/**
+ * 调试模式将 DEBUGMODEL 设置为1，即可打印时，带有文件名-函数名-行号格式
+ * 设置为0时，即关闭调试模式，不会输出文件名等用户不必要信息
+ */
+#define DEBUGMODEL 1
+#if DEBUGMODEL
+#define VVLOGGER_CALL(logger, level, ...) (logger)->log(vv::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__)
+
+#define VLOGGER_TRACE(logger, ...) VVLOGGER_CALL(logger, vv::level::trace, __VA_ARGS__)
+#define VTRACE(...) VLOGGER_TRACE(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_DEBUG(logger, ...) VVLOGGER_CALL(logger, vv::level::debug, __VA_ARGS__)
+#define VDEBUG(...) VLOGGER_DEBUG(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_INFO(logger, ...) VVLOGGER_CALL(logger, vv::level::info, __VA_ARGS__)
+#define VINFO(...) VLOGGER_INFO(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_WARN(logger, ...) VVLOGGER_CALL(logger, vv::level::warn, __VA_ARGS__)
+#define VWARN(...) VLOGGER_WARN(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_ERROR(logger, ...) VVLOGGER_CALL(logger, vv::level::err, __VA_ARGS__)
+#define VERROR(...) VLOGGER_ERROR(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_CRITICAL(logger, ...) VVLOGGER_CALL(logger, vv::level::critical, __VA_ARGS__)
+#define VCRITICAL(...) VLOGGER_CRITICAL(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#else
+#define VVLOGGER_CALL(logger, level, ...) (logger)->log(level, __VA_ARGS__)
+
+#define VLOGGER_TRACE(logger, ...) VVLOGGER_CALL(logger, vv::level::trace, __VA_ARGS__)
+#define VTRACE(...) VLOGGER_TRACE(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_DEBUG(logger, ...) VVLOGGER_CALL(logger, vv::level::debug, __VA_ARGS__)
+#define VDEBUG(...) VLOGGER_DEBUG(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_INFO(logger, ...) VVLOGGER_CALL(logger, vv::level::info, __VA_ARGS__)
+#define VINFO(...) VLOGGER_INFO(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_WARN(logger, ...) VVLOGGER_CALL(logger, vv::level::warn, __VA_ARGS__)
+#define VWARN(...) VLOGGER_WARN(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_ERROR(logger, ...) VVLOGGER_CALL(logger, vv::level::err, __VA_ARGS__)
+#define VERROR(...) VLOGGER_ERROR(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+
+#define VLOGGER_CRITICAL(logger, ...) VVLOGGER_CALL(logger, vv::level::critical, __VA_ARGS__)
+#define VCRITICAL(...) VLOGGER_CRITICAL(vv::vlogger::instance().vGetLogger(), __VA_ARGS__)
+#endif
