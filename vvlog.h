@@ -137,14 +137,8 @@ namespace vv {
 	void vvSetGlobalLevel(vvLevel l);
 
 
-	//TODO: func(Args &&) 
 	//TODO: user-defined objects
 	// https://fmt.dev/latest/api.html#udt
-	//template<typename... Args>
-	//void info(format_string_t<Args...> fmt, Args &&... args)
-	//{
-	//	log(level::info, fmt, std::forward<Args>(args)...);
-	//}
 }
 
 /**

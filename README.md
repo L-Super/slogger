@@ -61,6 +61,42 @@ VCRITICAL()
 ## 代码示例
 
 ```cpp
+#include "string"
+#include "vvlog.h"
+
+int main()
+{
+   std::string str{"hello world"};
+   vv::vvTrace("trace");//not display
+   vv::vvDebug("debug");//not display
+   vv::vvInfo(str);
+   vv::vvWarn("{} {} {} {}","this","is","a",str);
+   vv::vvError("{} != {}",1,2);
+
+   vv::vvSetGlobalLevel(vv::vvLevel::trace);
+   vv::vvTrace("display now");
+   VDEBUG("display now too");
+   VINFO("hello info");
+   VWARN(str);
+   return 0;
+}
+```
+
+输出：
+
+```
+[2022-09-09 15:05:48.340] [vvlog] [info] hello world
+[2022-09-09 15:05:48.341] [vvlog] [warning] this is a hello world
+[2022-09-09 15:05:48.342] [vvlog] [error] 1 != 2
+[2022-09-09 15:05:48.342] [vvlog] [trace] display now
+[2022-09-09 15:05:48.342] [vvlog] [debug] [example.cpp:14] display now too
+[2022-09-09 15:05:48.343] [vvlog] [info] [example.cpp:16] hello info
+[2022-09-09 15:05:48.343] [vvlog] [warning] [example.cpp:17] hello world
+```
+
+更多示例：
+
+```cpp
 vv::info("Welcome");
 vv::error("Some error message with arg: {}", 1);
 vv::warn("Easy padding in numbers like {:08d}", 12);
@@ -68,14 +104,6 @@ vv::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42)
 vv::info("Support for floats {:03.2f}", 1.23456);
 vv::info("Positional args are {1} {0}..", "too", "supported");
 vv::info("{:<30}", "left aligned");
-```
-
-注意，因现环境为GBK，**Qt的QString需要使用`toLocal8Bit()`转换**，否则会乱码。
-
-```cpp
-QString str(QStringLiteral("客户端"));
-vv::info(str.toLocal8Bit());
-vv::vvInfo("this is {}", str.toLocal8Bit());
 ```
 
 ## 注意
@@ -97,43 +125,4 @@ vv::vvSetGlobalLevel(vv::vvLevel::trace);
 
 
 ----
-
-附录
-
-VS测试结果（未考虑控制台编码为GBK）
-
-| 输出格式    | 文件编码  | QStringLiteral包含 | VS命令行加utf | 控制台输出 | 编译执行后文件日志 | 可执行 文件日志 |
-| ----------- | --------- | ------------------ | ------------- | ---------- | ------------------ | --------------- |
-| toStdString | UTF-8 BOM | 是                 | 无            | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | UTF-8 BOM | 是                 | 无            | 正常       | 正常               | 正常            |
-| toUtf8      | UTF-8 BOM | 是                 | 无            | 同std乱码  | 同std乱码          | 同std乱码       |
-|             |           |                    |               |            |                    |                 |
-| toStdString | UTF-8 BOM | 否                 | 无            | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | UTF-8 BOM | 否                 | 无            | ??乱码     | ??乱码             | ??乱码          |
-| toUtf8      | UTF-8 BOM | 否                 | 无            | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| toStdString | gbk       | 是                 | 无            | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | gbk       | 是                 | 无            | 正常       | 正常               | 正常            |
-| toUtf8      | gbk       | 是                 | 无            | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| toStdString | gbk       | 否                 | 无            | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | gbk       | 否                 | 无            | ??乱码     | ??乱码             | ??乱码          |
-| toUtf8      | gbk       | 否                 | 无            | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| toStdString | UTF-8 BOM | 是                 | u             | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | UTF-8 BOM | 是                 | u             | 正常       | 正常               | 正常            |
-| toUtf8      | UTF-8 BOM | 是                 | u             | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| toStdString | UTF-8 BOM | 否                 | u             | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | UTF-8 BOM | 否                 | u             | 正常       | 正常               | 正常            |
-| toUtf8      | UTF-8 BOM | 否                 | u             | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| toStdString | gbk       | 是                 | 无            | 乱码       | 乱码               | 乱码            |
-| toLocal8Bit | gbk       | 是                 | 无            | 正常       | 正常               | 正常            |
-| toUtf8      | gbk       | 是                 | 无            | 乱码       | 乱码               | 乱码            |
-|             |           |                    |               |            |                    |                 |
-| string      | gbk       | -                  | 无            | 正常       | 正常               | 正常            |
-| string      | gbk       | -                  | u             | 正常       | 正常               | 正常            |
-| string      | UTF-8 BOM | -                  | 无            | 正常       | 正常               | 正常            |
-| string      | UTF-8 BOM | -                  | u             | 乱码       | 乱码               | 乱码            |
 
