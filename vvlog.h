@@ -108,7 +108,7 @@ namespace vv {
 	}
 
 	template<typename T>
-	void vvInfo(const T&& msg)
+	void vvInfo(const T& msg)
 	{
 		vlogger::instance().mLogger->info(msg);
 	}
