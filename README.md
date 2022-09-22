@@ -106,6 +106,29 @@ vv::info("Positional args are {1} {0}..", "too", "supported");
 vv::info("{:<30}", "left aligned");
 ```
 
+## Tips
+
+可以在vvlog.h最后加上一段代码，即可支持QString输出（同时`std::cout`也支持了）。
+
+```c++
+template<typename OStream>
+OStream& operator<<(OStream& os, const QString& to_log)
+{
+	vv::fmt_lib::format_to(std::ostream_iterator<char>(os), "{}", to_log.toStdString());
+	return os;
+}
+```
+
+对于容器类，也可使用以下方式进行输出：
+
+```c++
+std::vector<int> v{ 1,2,3,4 };
+vv::vvInfo("{}",vv::fmt_lib::join(v, ", "));
+//[2022-09-22 11:02:22.843] [vvlog] [info] 1, 2, 3, 4
+```
+
+使用了准C++20 的 std::ranges方式
+
 ## 注意
 
 默认不会打印trace,debug级别日志，需要设置日志级别。
